@@ -1,0 +1,45 @@
+
+
+----------------------------------------
+kovit_ArticleInCategory
+UDF_kovit_ArticleRatingAverage
+UDF_kovit_ArticleRatingTotal 
+
+kovit_ArticleSearch
+kovit_ArticleCategoryGetAllAssigned
+kovit_ArticleCategoryGetAllAviable
+kovit_ArticleCategoryListDeleteByArticleCategory
+kovit_ArticleRatingGetTotalByArticle
+kovit_ArticleCommentGetAllByArticle
+
+kovit_ArticleAttachmentGetAllByType
+kovit_ArticleAttachmentDeleteByFileID
+
+kovit_ArticleCategoryGetTargetTabs
+
+ArticleCategoryGetAllByPortalLanguage
+
+ http://localhost/dnn/language/ru-RU/Articles.aspx
+ http://localhost/dnn/language/ru-RU/Articles/0/root.aspx
+ http://localhost/dnn/language/en-US/Articles/5/setevik.aspx
+  
+   
+ http://localhost/dnn/language/ru-RU/Articles/page/2/.aspx  
+ http://localhost/dnn/language/ru-RU/Articles/category/0/root.aspx
+ http://localhost/dnn/language/ru-RU/Articles/category/0/root/subcategory.aspx
+ http://localhost/dnn/language/ru-RU/Articles/date/2009/11.aspx
+ http://localhost/dnn/language/ru-RU/Articles/Featured.aspx
+ http://localhost/dnn/language/ru-RU/Articles/TopRated.aspx
+ 
+ 
+ http://localhost/dnn/language/en-US/Articles/ctl/Edit/mid/483/ArticleID/5.aspx
+ 
+ http://localhost/dnn/language/ru-RU/Articles/search.aspx?text=%20%33%82xzf
+ 
+ 
+ http://localhost/dnn/language/ru-RU/Articles/ctl/Edit/mid/483/ArticleID/1.aspx
+ http://localhost/dnn/language/ru-RU/Articles/ctl/Edit/mid/483/ArticleID/editcategory.aspx
+ Coming soon... Stay tuned
+
+        Services.Localization.Localization.GetString("DeleteItem") 
+ 

@@ -1,0 +1,3300 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Table Order due to contraints                    *****/
+
+/************************************************************/
+
+--|--------------------------------------------------------------------------------
+--| CREATION OF TABLES
+--|--------------------------------------------------------------------------------
+
+
+--==========[ Create table columns [kovit_Article] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_Article]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_Article]
+(
+		[ArticleID] Integer  Identity(1,1)   NOT NULL ,
+		[LanguageID] Integer   NOT NULL ,
+		[PortalID] Integer   NOT NULL ,
+		[PublicationDate] datetime  Default getdate()   NOT NULL ,
+		[Title] nvarchar(128)  Default ''   NOT NULL ,
+		[Description] nvarchar(160)  Default ''   NOT NULL ,
+		[KeyWord] nvarchar(200)  Default ''   NOT NULL ,
+		[ArticleURL] varchar(128)  Default ''   NOT NULL ,
+		[SortOrder] Integer  Default 65535   NOT NULL ,
+		[isHidden] bit  Default 0   NOT NULL ,
+		[isFeatured] bit  Default 0   NOT NULL ,
+		[ArticleHTML] nvarchar(MAX)  Default ''   NOT NULL ,
+		[CreatedByUserID] Integer   NULL  ,
+		[CreatedOnDate] datetime  Default getdate()   NULL  ,
+		[LastModifiedByUserID] Integer   NULL  ,
+		[LastModifiedOnDate] datetime  Default getdate()   NULL  ,
+
+)
+ 
+--==========[Create Primary Keys for Table [kovit_Article ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_Article] add Constraint [pk_kovit_Article] Primary Key (ArticleID)
+
+
+--==========[Create Foreign Keys for Table [kovit_Article ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_Article] add Constraint [FK_Languages_kovit_Article] Foreign Key (LanguageID)
+ references {databaseOwner}[{objectQualifier}Languages] (LanguageID)on update NO ACTION on delete NO ACTION 
+Alter table {databaseOwner}[{objectQualifier}kovit_Article] add Constraint [FK_Portals_kovit_Article] Foreign Key (PortalID)
+ references {databaseOwner}[{objectQualifier}Portals] (PortalID)on update NO ACTION on delete NO ACTION 
+
+END
+GO
+
+
+
+
+
+
+--==========[ Create table columns [kovit_ArticleAttachmentType] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]
+(
+		[ArticleAttachmentTypeCode] nvarchar(50)  Default ''   NOT NULL ,
+		[ArticleAttachmentTypeName] nvarchar(50)  Default ''   NOT NULL ,
+
+)
+ 
+--==========[Create Primary Keys for Table [kovit_ArticleAttachmentType ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType] add Constraint [pk_kovit_ArticleAttachmentType] Primary Key (ArticleAttachmentTypeCode)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleAttachmentType ]==========--
+
+END
+GO
+
+--==========[ Create table columns [kovit_ArticleAttachment] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachment]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+(
+		[ArticleAttachmentID] Integer  Identity(1,1)   NOT NULL ,
+		[ArticleAttachmentTypeCode] nvarchar(50)  Default ''   NOT NULL ,
+		[FileId] Integer   NOT NULL ,
+		[SortOrder] Integer  Default 65535   NOT NULL ,
+		[ArticleID] Integer   NOT NULL ,
+
+)
+
+INSERT INTO {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]([ArticleAttachmentTypeCode], [ArticleAttachmentTypeName]) VALUES
+	(N'download', N'direct link');
+INSERT INTO {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]([ArticleAttachmentTypeCode], [ArticleAttachmentTypeName]) VALUES
+	(N'preview-image', N'image preview');
+INSERT INTO {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]([ArticleAttachmentTypeCode], [ArticleAttachmentTypeName]) VALUES
+	(N'raw-image', N'raw image');
+ 
+--==========[Create Primary Keys for Table [kovit_ArticleAttachment ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] add Constraint [pk_kovit_ArticleAttachment] Primary Key (ArticleAttachmentID)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleAttachment ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] add Constraint [FK_Files_kovit_ArticleAttachment] Foreign Key (FileId)
+ references {databaseOwner}[{objectQualifier}Files] (FileId)on update NO ACTION on delete NO ACTION 
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] add Constraint [FK_kovit_Article_kovit_ArticleAttachment] Foreign Key (ArticleID)
+ references {databaseOwner}[{objectQualifier}kovit_Article] (ArticleID)on update NO ACTION on delete NO ACTION 
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] add Constraint [FK_kovit_ArticleAttachmentType_kovit_ArticleAttachment] Foreign Key (ArticleAttachmentTypeCode)
+ references {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType] (ArticleAttachmentTypeCode)on update NO ACTION on delete NO ACTION 
+
+END
+GO
+
+
+--==========[ Create table columns {databaseOwner}[{objectQualifier}kovit_ArticleCategory] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategory]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+(
+		[ArticleCategoryID] Integer  Identity(1,1)   NOT NULL ,
+		[ParentCategoryID] Integer   NOT NULL ,
+		[TabID] Integer  Default 41   NOT NULL ,
+		[LanguageID] Integer   NOT NULL ,
+		[PortalID] Integer   NOT NULL ,
+		[Title] nvarchar(128)  Default ''   NOT NULL ,
+		[Description] nvarchar(160)  Default ''   NOT NULL ,
+		[KeyWord] nvarchar(200)  Default ''   NOT NULL ,
+		[ArticleCategoryURL] varchar(128)  Default ''   NOT NULL ,
+		[SortOrder] Integer  Default 65535   NOT NULL ,
+		[CreatedByUserID] Integer   NULL  ,
+		[CreatedOnDate] datetime  Default getdate()   NULL  ,
+		[LastModifiedByUserID] Integer   NULL  ,
+		[LastModifiedOnDate] datetime  Default getdate()   NULL  ,
+
+)
+--==========[Create Primary Keys for Table [kovit_ArticleCategory ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategory] add Constraint [pk_kovit_ArticleCategory] Primary Key (ArticleCategoryID)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleCategory ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategory] add Constraint [FK_Languages_kovit_ArticleCategory] Foreign Key (LanguageID)
+ references {databaseOwner}[{objectQualifier}Languages] (LanguageID)on update NO ACTION on delete NO ACTION 
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategory] add Constraint [FK_Portals_kovit_ArticleCategory] Foreign Key (PortalID)
+ references {databaseOwner}[{objectQualifier}Portals] (PortalID)on update NO ACTION on delete NO ACTION 
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategory] add Constraint [FK_Tabs_kovit_ArticleCategory] Foreign Key (TabID)
+ references {databaseOwner}[{objectQualifier}Tabs] (TabID)on update NO ACTION on delete NO ACTION 
+
+END
+GO
+
+
+
+--==========[ Create table columns [kovit_ArticleCategoryList] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+(
+		[ArticleCategoryListID] Integer  Identity(1,1)   NOT NULL ,
+		[ArticleID] Integer   NOT NULL ,
+		[ArticleCategoryID] Integer   NOT NULL ,
+
+)
+ 
+--==========[Create Primary Keys for Table [kovit_ArticleCategoryList ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList] add Constraint [pk_kovit_ArticleCategoryList] Primary Key (ArticleCategoryListID)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleCategoryList ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList] add Constraint [FK_kovit_Article_kovit_ArticleCategoryList] Foreign Key (ArticleID)
+ references {databaseOwner}[{objectQualifier}kovit_Article] (ArticleID)on update NO ACTION on delete NO ACTION 
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList] add Constraint [FK_kovit_ArticleCategory_kovit_ArticleCategoryList] Foreign Key (ArticleCategoryID)
+ references {databaseOwner}[{objectQualifier}kovit_ArticleCategory] (ArticleCategoryID)on update NO ACTION on delete CASCADE 
+
+END
+GO
+
+
+
+--==========[ Create table columns [kovit_ArticleComment] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleComment]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+(
+		[ArticleCommentID] Integer  Identity(1,1)   NOT NULL ,
+		[ArticleID] Integer   NOT NULL ,
+		[ArticleCommentText] nvarchar(4000)  Default ''   NOT NULL ,
+		[Email] varchar(320)  Default ''   NOT NULL ,
+		[Name] nvarchar(50)  Default ''   NOT NULL ,
+		[Approved] bit  Default 0   NOT NULL ,
+		[IpAddress] varchar(15)  Default '0.0.0.0'   NOT NULL ,
+		[CreatedByUserID] Integer   NULL  ,
+		[CreatedOnDate] datetime  Default getdate()   NULL  ,
+
+)
+ 
+--==========[Create Primary Keys for Table [kovit_ArticleComment ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleComment] add Constraint [pk_kovit_ArticleComment] Primary Key (ArticleCommentID)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleComment ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleComment] add Constraint [FK_kovit_Article_kovit_ArticleComment] Foreign Key (ArticleID)
+ references {databaseOwner}[{objectQualifier}kovit_Article] (ArticleID)on update NO ACTION on delete NO ACTION 
+
+END
+GO
+
+
+
+--==========[ Create table columns [kovit_ArticleEvent] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEvent]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+(
+		[ArticleEventID] Integer  Identity(1,1)   NOT NULL ,
+		[ArticleID] Integer   NOT NULL ,
+		[Title] nvarchar(255)  Default ''   NOT NULL ,
+		[Description] nvarchar(4000)  Default ''   NOT NULL ,
+		[StartDate] datetime  Default getdate()   NOT NULL ,
+		[EndDate] smalldatetime  Default getdate()   NOT NULL ,
+
+)
+ 
+--==========[Create Primary Keys for Table [kovit_ArticleEvent ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleEvent] add Constraint [pk_kovit_ArticleEvent] Primary Key (ArticleEventID)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleEvent ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleEvent] add Constraint [FK_kovit_Article_kovit_ArticleEvent] Foreign Key (ArticleID)
+ references {databaseOwner}[{objectQualifier}kovit_Article] (ArticleID)on update NO ACTION on delete NO ACTION 
+
+END
+GO
+
+
+
+--==========[ Create table columns [kovit_ArticleRating] from SQL script.  ]==========--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRating]') AND type in (N'U'))
+BEGIN
+Create table {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+(
+		[ArticleRatingID] Integer  Identity(1,1)   NOT NULL ,
+		[ArticleID] Integer   NOT NULL ,
+		[Rating] Integer  Default 0   NOT NULL ,
+		[IpAddress] varchar(15)  Default '0.0.0.0'   NOT NULL ,
+		[CreatedByUserID] Integer   NULL  ,
+		[CreatedOnDate] datetime  Default getdate()   NULL  ,
+
+)
+ 
+--==========[Create Primary Keys for Table [kovit_ArticleRating ]==========--
+		Alter table {databaseOwner}[{objectQualifier}kovit_ArticleRating] add Constraint [pk_kovit_ArticleRating] Primary Key (ArticleRatingID)
+
+
+--==========[Create Foreign Keys for Table [kovit_ArticleRating ]==========--
+Alter table {databaseOwner}[{objectQualifier}kovit_ArticleRating] add Constraint [FK_kovit_Article_kovit_ArticleRating] Foreign Key (ArticleID)
+ references {databaseOwner}[{objectQualifier}kovit_Article] (ArticleID)on update NO ACTION on delete NO ACTION 
+
+END
+GO 
+
+--|--------------------------------------------------------------------------------
+--| CREATION OF Stored Procedures
+--|--------------------------------------------------------------------------------
+ 
+--==[Drop Stored Procedure [kovit_ArticleAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAdd]
+(
+	@LanguageID int,
+	@PortalID int,
+	@PublicationDate datetime,
+	@Title nvarchar(128),
+	@Description nvarchar(160),
+	@KeyWord nvarchar(200),
+	@ArticleURL varchar(128),
+	@SortOrder int,
+	@isHidden bit,
+	@isFeatured bit,
+	@ArticleHTML nvarchar(MAX),
+	@CreatedByUserID int,
+	@CreatedOnDate datetime,
+	@LastModifiedByUserID int,
+	@LastModifiedOnDate datetime
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_Article]
+	(
+		[LanguageID],
+		[PortalID],
+		[PublicationDate],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleURL],
+		[SortOrder],
+		[isHidden],
+		[isFeatured],
+		[ArticleHTML],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	)
+	VALUES
+	(
+		@LanguageID,
+		@PortalID,
+		isNull(@PublicationDate,getdate()),
+		isNull(@Title,''),
+		isNull(@Description,''),
+		isNull(@KeyWord,''),
+		isNull(@ArticleURL,''),
+		isNull(@SortOrder,65535),
+		isNull(@isHidden,0),
+		isNull(@isFeatured,0),
+		isNull(@ArticleHTML,''),
+		@CreatedByUserID,
+		@CreatedOnDate,
+		@LastModifiedByUserID,
+		@LastModifiedOnDate
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentAdd]
+(
+	@ArticleAttachmentTypeCode nvarchar(50),
+	@FileId int,
+	@SortOrder int,
+	@ArticleID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	(
+		[ArticleAttachmentTypeCode],
+		[FileId],
+		[SortOrder],
+		[ArticleID]
+	)
+	VALUES
+	(
+		isNull(@ArticleAttachmentTypeCode,''),
+		@FileId,
+		isNull(@SortOrder,65535),
+		@ArticleID
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDelete]
+(
+	@ArticleAttachmentID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	WHERE
+		[ArticleAttachmentID] = @ArticleAttachmentID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentDeleteByFileID] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDeleteByFileID]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDeleteByFileID]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDeleteByFileID]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentDeleteByFileID ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentDeleteByFileID]
+(
+	@FileId int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM [kovit_ArticleAttachment]
+	WHERE
+		[FileId] = @FileId
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGet]
+(
+	@ArticleAttachmentID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleAttachmentID],
+		[ArticleAttachmentTypeCode],
+		[FileId],
+		[SortOrder],
+		[ArticleID]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	WHERE
+		([ArticleAttachmentID] = @ArticleAttachmentID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleAttachmentID],
+		[ArticleAttachmentTypeCode],
+		[FileId],
+		[SortOrder],
+		[ArticleID]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGetAllByArticle] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticle]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticle]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticle]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGetAllByArticle ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticle]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleAttachmentID],
+		[ArticleAttachmentTypeCode],
+		[FileId],
+		[SortOrder],
+		[ArticleID]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	WHERE
+	--kovit_Article
+	
+		[ArticleID] = @ArticleID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGetAllByArticleAttachmentType] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticleAttachmentType]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticleAttachmentType]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticleAttachmentType]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGetAllByArticleAttachmentType ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByArticleAttachmentType]
+(
+	@ArticleAttachmentTypeCode nvarchar(50)
+)
+AS
+BEGIN
+	SELECT
+		[ArticleAttachmentID],
+		[ArticleAttachmentTypeCode],
+		[FileId],
+		[SortOrder],
+		[ArticleID]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	WHERE
+	--kovit_ArticleAttachmentType
+	
+		[ArticleAttachmentTypeCode] = @ArticleAttachmentTypeCode
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGetAllByFiles] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByFiles]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByFiles]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByFiles]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGetAllByFiles ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByFiles]
+(
+	@FileId int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleAttachmentID],
+		[ArticleAttachmentTypeCode],
+		[FileId],
+		[SortOrder],
+		[ArticleID]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	WHERE
+	--Files
+	
+		[FileId] = @FileId
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGetAllByType] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByType]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByType]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByType]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGetAllByType ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllByType]
+(
+	@PortalID int,
+	@ArticleID int,
+	@ArticleAttachmentTypeCode nvarchar(50)
+)
+AS
+BEGIN
+	SELECT aa.[FileId]
+      ,[PortalId]
+      ,[FileName]
+      ,[Extension]
+      ,[Size]
+      ,[Width]
+      ,[Height]
+      ,[ContentType]
+      ,[Folder]
+      ,[FolderID]
+      ,[Content]
+      ,[CreatedByUserID]
+      ,[CreatedOnDate]
+      ,[LastModifiedByUserID]
+      ,[LastModifiedOnDate]
+  FROM {databaseOwner}[{objectQualifier}Files] as f
+inner join {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] aa
+on  aa.fileID=f.fileID
+and aa.ArticleID=@ArticleID
+and aa.[ArticleAttachmentTypeCode]= CASE WHEN @ArticleAttachmentTypeCode = '' THEN aa.[ArticleAttachmentTypeCode] ELSE @ArticleAttachmentTypeCode end
+WHERE PortalID=@PortalID--and FolderID=''
+
+/*
+--  FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] aa
+	left join {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] as preview
+	on aa.[ArticleID] = preview.[ArticleID]
+		and aa.[SortOrder]=preview.[SortOrder]
+		and aa.[ArticleID]=preview.[ArticleID]
+		and aa.[ArticleAttachmentTypeCode]='raw-image' 
+		and preview.[ArticleAttachmentTypeCode]='preview-image' 
+where aa.[ArticleAttachmentTypeCode]<>'preview-image'
+*/
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentGetAllImage] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllImage]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllImage]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllImage]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentGetAllImage ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentGetAllImage]
+(
+	@PortalID int,
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT aa.[FileId]
+      ,[PortalId]
+      ,[FileName]
+      ,[Extension]
+      ,[Size]
+      ,[Width]
+      ,[Height]
+      ,[ContentType]
+      ,[Folder]
+      ,[FolderID]
+      ,[Content]
+      ,[CreatedByUserID]
+      ,[CreatedOnDate]
+      ,[LastModifiedByUserID]
+      ,[LastModifiedOnDate]
+  FROM {databaseOwner}[{objectQualifier}Files] as f
+inner join {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] aa
+on  aa.fileID=f.fileID
+and aa.ArticleID=@ArticleID
+and aa.[ArticleAttachmentTypeCode]='raw-image'
+WHERE PortalID=0 --and FolderID=''
+
+/*
+--  FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] aa
+	left join {databaseOwner}[{objectQualifier}kovit_ArticleAttachment] as preview
+	on aa.[ArticleID] = preview.[ArticleID]
+		and aa.[SortOrder]=preview.[SortOrder]
+		and aa.[ArticleID]=preview.[ArticleID]
+		and aa.[ArticleAttachmentTypeCode]='raw-image' 
+		and preview.[ArticleAttachmentTypeCode]='preview-image' 
+where aa.[ArticleAttachmentTypeCode]<>'preview-image'
+*/
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentTypeAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentTypeAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeAdd]
+(
+	@ArticleAttachmentTypeCode nvarchar(50),
+	@ArticleAttachmentTypeName nvarchar(50)
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]
+	(
+		[ArticleAttachmentTypeCode],
+		[ArticleAttachmentTypeName]
+	)
+	VALUES
+	(
+		isNull(@ArticleAttachmentTypeCode,''),
+		isNull(@ArticleAttachmentTypeName,'')
+	)
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentTypeDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentTypeDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeDelete]
+(
+	@ArticleAttachmentTypeCode nvarchar(50)
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]
+	WHERE
+		[ArticleAttachmentTypeCode] = @ArticleAttachmentTypeCode
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentTypeGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentTypeGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGet]
+(
+	@ArticleAttachmentTypeCode nvarchar(50)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleAttachmentTypeCode],
+		[ArticleAttachmentTypeName]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]
+	WHERE
+		([ArticleAttachmentTypeCode] = @ArticleAttachmentTypeCode)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentTypeGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentTypeGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleAttachmentTypeCode],
+		[ArticleAttachmentTypeName]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentTypeUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentTypeUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentTypeUpdate]
+(
+	@ArticleAttachmentTypeCode nvarchar(50),
+	@ArticleAttachmentTypeName nvarchar(50)
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentType]
+	SET
+-- nvarchar(50)
+		[ArticleAttachmentTypeName] = @ArticleAttachmentTypeName
+	WHERE
+		[ArticleAttachmentTypeCode] = @ArticleAttachmentTypeCode
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleAttachmentUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleAttachmentUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleAttachmentUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleAttachmentUpdate]
+(
+	@ArticleAttachmentID int,
+	@ArticleAttachmentTypeCode nvarchar(50),
+	@FileId int,
+	@SortOrder int,
+	@ArticleID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleAttachment]
+	SET
+-- nvarchar(50)
+		[ArticleAttachmentTypeCode] = @ArticleAttachmentTypeCode,
+-- int
+		[FileId] = @FileId,
+-- int
+		[SortOrder] = @SortOrder,
+-- int
+		[ArticleID] = @ArticleID
+	WHERE
+		[ArticleAttachmentID] = @ArticleAttachmentID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryAdd]
+(
+	@ParentCategoryID int,
+	@TabID int,
+	@LanguageID int,
+	@PortalID int,
+	@Title nvarchar(128),
+	@Description nvarchar(160),
+	@KeyWord nvarchar(200),
+	@ArticleCategoryURL varchar(128),
+	@SortOrder int,
+	@CreatedByUserID int,
+	@CreatedOnDate datetime,
+	@LastModifiedByUserID int,
+	@LastModifiedOnDate datetime
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	(
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	)
+	VALUES
+	(
+		@ParentCategoryID,
+		@TabID,
+		@LanguageID,
+		@PortalID,
+		isNull(@Title,''),
+		isNull(@Description,''),
+		isNull(@KeyWord,''),
+		isNull(@ArticleCategoryURL,''),
+		isNull(@SortOrder,65535),
+		@CreatedByUserID,
+		@CreatedOnDate,
+		@LastModifiedByUserID,
+		@LastModifiedOnDate
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryDelete]
+(
+	@ArticleCategoryID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+		[ArticleCategoryID] = @ArticleCategoryID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGet]
+(
+	@ArticleCategoryID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+		([ArticleCategoryID] = @ArticleCategoryID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAllAssigned] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAssigned]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAssigned]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAssigned]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAllAssigned ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAssigned]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		{databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+		[ArticleCategoryID]   in (
+			select [ArticleCategoryID] 
+			from {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList] 
+			where ArticleID=@ArticleID)
+	
+		
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAllAvailable] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAvailable]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAvailable]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAvailable]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAllAvailable ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllAvailable]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		{databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+
+	WHERE
+	--(
+		    [LanguageID] =  (select [LanguageID] from {databaseOwner}[{objectQualifier}kovit_Article] where	ArticleID=@ArticleID )
+		and [PortalID] =  (select [PortalID] from {databaseOwner}[{objectQualifier}kovit_Article] where	ArticleID=@ArticleID )
+		and [ArticleCategoryID]<>[ParentCategoryID]
+		and [ArticleCategoryID] not in (
+			select [ArticleCategoryID] 
+			from {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList] 
+			where ArticleID=@ArticleID)
+	--) or [ArticleCategoryID]=0
+	
+		
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAllByLanguages] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByLanguages]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByLanguages]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByLanguages]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAllByLanguages ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByLanguages]
+(
+	@LanguageID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+	--Languages
+	
+		[LanguageID] = @LanguageID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAllByPortalLanguage] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortalLanguage]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortalLanguage]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortalLanguage]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAllByPortalLanguage ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortalLanguage]
+(
+
+	@PortalID int,
+	@LanguageID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		{databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+	--Portals
+	([PortalID] = @PortalID
+		and [LanguageID] = @LanguageID)
+	or [ArticleCategoryID]=0
+	order by [SortOrder] asc
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAllByPortals] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortals]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortals]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortals]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAllByPortals ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByPortals]
+(
+	@PortalID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+	--Portals
+	
+		[PortalID] = @PortalID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetAllByTabs] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByTabs]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByTabs]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByTabs]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetAllByTabs ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetAllByTabs]
+(
+	@TabID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryID],
+		[ParentCategoryID],
+		[TabID],
+		[LanguageID],
+		[PortalID],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleCategoryURL],
+		[SortOrder],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	WHERE
+	--Tabs
+	
+		[TabID] = @TabID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryGetTargetTabs] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetTargetTabs]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetTargetTabs]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetTargetTabs]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryGetTargetTabs ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryGetTargetTabs]
+(
+	@PortalID int
+)
+AS
+BEGIN
+	 SELECT t.[TabID]
+      ,t.[TabOrder]
+      ,t.[PortalID]
+      ,t.[TabName]
+      ,t.[IsVisible]
+      ,t.[ParentId]
+      ,t.[Level]
+      ,t.[IconFile]
+      ,t.[DisableLink]
+      ,t.[Title]
+      ,t.[Description]
+      ,t.[KeyWords]
+      ,t.[IsDeleted]
+      ,t.[Url]
+      ,t.[SkinSrc]
+      ,t.[ContainerSrc]
+      ,t.[TabPath]
+      ,t.[StartDate]
+      ,t.[EndDate]
+      ,t.[RefreshInterval]
+      ,t.[PageHeadText]
+      ,t.[IsSecure]
+      ,t.[PermanentRedirect]
+      ,t.[SiteMapPriority]
+      ,t.[CreatedByUserID]
+      ,t.[CreatedOnDate]
+      ,t.[LastModifiedByUserID]
+      ,t.[LastModifiedOnDate]
+      ,t.[IconFileLarge]
+  FROM {databaseOwner}[{objectQualifier}Tabs] as t
+inner join {databaseOwner}[{objectQualifier}TabModules] as tm
+	on t.[TabID] =  tm.[TabID]
+inner join  {databaseOwner}[{objectQualifier}Modules] as m
+	on tm.[ModuleID] =  m.[ModuleID]
+	and m.[ModuleTitle] = 'kovit.Article'
+where t.[PortalID] =@PortalID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListAdd]
+(
+	@ArticleID int,
+	@ArticleCategoryID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	(
+		[ArticleID],
+		[ArticleCategoryID]
+	)
+	VALUES
+	(
+		@ArticleID,
+		@ArticleCategoryID
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDelete]
+(
+	@ArticleCategoryListID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	WHERE
+		[ArticleCategoryListID] = @ArticleCategoryListID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListDeleteByArticleCategory] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDeleteByArticleCategory]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDeleteByArticleCategory]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDeleteByArticleCategory]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListDeleteByArticleCategory ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListDeleteByArticleCategory]
+(
+	 @ArticleID int
+    ,@ArticleCategoryID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM [kovit_ArticleCategoryList]
+	WHERE
+		[ArticleCategoryID] = @ArticleCategoryID
+		and
+		[ArticleID] = @ArticleID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGet]
+(
+	@ArticleCategoryListID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleCategoryListID],
+		[ArticleID],
+		[ArticleCategoryID]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	WHERE
+		([ArticleCategoryListID] = @ArticleCategoryListID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleCategoryListID],
+		[ArticleID],
+		[ArticleCategoryID]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListGetAllByArticle] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticle]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticle]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticle]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListGetAllByArticle ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticle]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryListID],
+		[ArticleID],
+		[ArticleCategoryID]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	WHERE
+	--kovit_Article
+	
+		[ArticleID] = @ArticleID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListGetAllByArticleCategory] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticleCategory]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticleCategory]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticleCategory]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListGetAllByArticleCategory ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListGetAllByArticleCategory]
+(
+	@ArticleCategoryID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCategoryListID],
+		[ArticleID],
+		[ArticleCategoryID]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	WHERE
+	--kovit_ArticleCategory
+	
+		[ArticleCategoryID] = @ArticleCategoryID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryListUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryListUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryListUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryListUpdate]
+(
+	@ArticleCategoryListID int,
+	@ArticleID int,
+	@ArticleCategoryID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+	SET
+-- int
+		[ArticleID] = @ArticleID,
+-- int
+		[ArticleCategoryID] = @ArticleCategoryID
+	WHERE
+		[ArticleCategoryListID] = @ArticleCategoryListID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCategoryUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryUpdate]
+(
+	@ArticleCategoryID int,
+	@ParentCategoryID int,
+	@TabID int,
+	@LanguageID int,
+	@PortalID int,
+	@Title nvarchar(128),
+	@Description nvarchar(160),
+	@KeyWord nvarchar(200),
+	@ArticleCategoryURL varchar(128),
+	@SortOrder int,
+	@CreatedByUserID int = NULL,
+	@CreatedOnDate datetime = NULL,
+	@LastModifiedByUserID int = NULL,
+	@LastModifiedOnDate datetime = NULL
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleCategory]
+	SET
+-- int
+		[ParentCategoryID] = @ParentCategoryID,
+-- int
+		[TabID] = @TabID,
+-- int
+		[LanguageID] = @LanguageID,
+-- int
+		[PortalID] = @PortalID,
+-- nvarchar(128)
+		[Title] = @Title,
+-- nvarchar(160)
+		[Description] = @Description,
+-- nvarchar(200)
+		[KeyWord] = @KeyWord,
+-- varchar(128)
+		[ArticleCategoryURL] = @ArticleCategoryURL,
+-- int
+		[SortOrder] = @SortOrder,
+-- int
+		[CreatedByUserID] = @CreatedByUserID,
+-- datetime
+		[CreatedOnDate] = @CreatedOnDate,
+-- int
+		[LastModifiedByUserID] = @LastModifiedByUserID,
+-- datetime
+		[LastModifiedOnDate] = @LastModifiedOnDate
+	WHERE
+		[ArticleCategoryID] = @ArticleCategoryID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCommentAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCommentAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCommentAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCommentAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentAdd]
+(
+	@ArticleID int,
+	@ArticleCommentText nvarchar(4000),
+	@Email varchar(320),
+	@Name nvarchar(50),
+	@Approved bit,
+	@IpAddress varchar(15),
+	@CreatedByUserID int,
+	@CreatedOnDate datetime
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+	(
+		[ArticleID],
+		[ArticleCommentText],
+		[Email],
+		[Name],
+		[Approved],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	)
+	VALUES
+	(
+		@ArticleID,
+		isNull(@ArticleCommentText,''),
+		isNull(@Email,''),
+		isNull(@Name,''),
+		isNull(@Approved,0),
+		isNull(@IpAddress,'0.0.0.0'),
+		@CreatedByUserID,
+		@CreatedOnDate
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCommentDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCommentDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCommentDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCommentDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentDelete]
+(
+	@ArticleCommentID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+	WHERE
+		[ArticleCommentID] = @ArticleCommentID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCommentGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCommentGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCommentGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCommentGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentGet]
+(
+	@ArticleCommentID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleCommentID],
+		[ArticleID],
+		[ArticleCommentText],
+		[Email],
+		[Name],
+		[Approved],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+	WHERE
+		([ArticleCommentID] = @ArticleCommentID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCommentGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCommentGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleCommentID],
+		[ArticleID],
+		[ArticleCommentText],
+		[Email],
+		[Name],
+		[Approved],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCommentGetAllByArticle] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAllByArticle]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAllByArticle]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAllByArticle]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCommentGetAllByArticle ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentGetAllByArticle]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleCommentID],
+		[ArticleID],
+		[ArticleCommentText],
+		[Email],
+		[Name],
+		[Approved],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+	WHERE
+	--kovit_Article
+	
+		[ArticleID] = @ArticleID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleCommentUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCommentUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCommentUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleCommentUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCommentUpdate]
+(
+	@ArticleCommentID int,
+	@ArticleID int,
+	@ArticleCommentText nvarchar(4000),
+	@Email varchar(320),
+	@Name nvarchar(50),
+	@Approved bit,
+	@IpAddress varchar(15),
+	@CreatedByUserID int = NULL,
+	@CreatedOnDate datetime = NULL
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleComment]
+	SET
+-- int
+		[ArticleID] = @ArticleID,
+-- nvarchar(4000)
+		[ArticleCommentText] = @ArticleCommentText,
+-- varchar(320)
+		[Email] = @Email,
+-- nvarchar(50)
+		[Name] = @Name,
+-- bit
+		[Approved] = @Approved,
+-- varchar(15)
+		[IpAddress] = @IpAddress,
+-- int
+		[CreatedByUserID] = @CreatedByUserID,
+-- datetime
+		[CreatedOnDate] = @CreatedOnDate
+	WHERE
+		[ArticleCommentID] = @ArticleCommentID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleDelete]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_Article]
+	WHERE
+		[ArticleID] = @ArticleID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleEventAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleEventAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEventAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleEventAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventAdd]
+(
+	@ArticleID int,
+	@Title nvarchar(255),
+	@Description nvarchar(4000),
+	@StartDate datetime,
+	@EndDate smalldatetime
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+	(
+		[ArticleID],
+		[Title],
+		[Description],
+		[StartDate],
+		[EndDate]
+	)
+	VALUES
+	(
+		@ArticleID,
+		isNull(@Title,''),
+		isNull(@Description,''),
+		isNull(@StartDate,getdate()),
+		isNull(@EndDate,getdate())
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleEventDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleEventDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEventDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleEventDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventDelete]
+(
+	@ArticleEventID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+	WHERE
+		[ArticleEventID] = @ArticleEventID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleEventGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleEventGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEventGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleEventGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventGet]
+(
+	@ArticleEventID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleEventID],
+		[ArticleID],
+		[Title],
+		[Description],
+		[StartDate],
+		[EndDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+	WHERE
+		([ArticleEventID] = @ArticleEventID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleEventGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleEventGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEventGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleEventGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleEventID],
+		[ArticleID],
+		[Title],
+		[Description],
+		[StartDate],
+		[EndDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleEventGetAllByArticle] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleEventGetAllByArticle]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEventGetAllByArticle]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventGetAllByArticle]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleEventGetAllByArticle ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventGetAllByArticle]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleEventID],
+		[ArticleID],
+		[Title],
+		[Description],
+		[StartDate],
+		[EndDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+	WHERE
+	--kovit_Article
+	
+		[ArticleID] = @ArticleID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleEventUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleEventUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleEventUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleEventUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleEventUpdate]
+(
+	@ArticleEventID int,
+	@ArticleID int,
+	@Title nvarchar(255),
+	@Description nvarchar(4000),
+	@StartDate datetime,
+	@EndDate smalldatetime
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleEvent]
+	SET
+-- int
+		[ArticleID] = @ArticleID,
+-- nvarchar(255)
+		[Title] = @Title,
+-- nvarchar(4000)
+		[Description] = @Description,
+-- datetime
+		[StartDate] = @StartDate,
+-- smalldatetime
+		[EndDate] = @EndDate
+	WHERE
+		[ArticleEventID] = @ArticleEventID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGet]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleID],
+		[LanguageID],
+		[PortalID],
+		[PublicationDate],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleURL],
+		[SortOrder],
+		[isHidden],
+		[isFeatured],
+		[ArticleHTML],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_Article]
+	WHERE
+		([ArticleID] = @ArticleID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleID],
+		[LanguageID],
+		[PortalID],
+		[PublicationDate],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleURL],
+		[SortOrder],
+		[isHidden],
+		[isFeatured],
+		[ArticleHTML],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_Article]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleGetAllByLanguages] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleGetAllByLanguages]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleGetAllByLanguages]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGetAllByLanguages]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleGetAllByLanguages ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGetAllByLanguages]
+(
+	@LanguageID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleID],
+		[LanguageID],
+		[PortalID],
+		[PublicationDate],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleURL],
+		[SortOrder],
+		[isHidden],
+		[isFeatured],
+		[ArticleHTML],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_Article]
+	WHERE
+	--Languages
+	
+		[LanguageID] = @LanguageID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleGetAllByPortals] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleGetAllByPortals]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleGetAllByPortals]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGetAllByPortals]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleGetAllByPortals ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleGetAllByPortals]
+(
+	@PortalID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleID],
+		[LanguageID],
+		[PortalID],
+		[PublicationDate],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleURL],
+		[SortOrder],
+		[isHidden],
+		[isFeatured],
+		[ArticleHTML],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+		[LastModifiedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_Article]
+	WHERE
+	--Portals
+	
+		[PortalID] = @PortalID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleInCategory] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleInCategory]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleInCategory]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION {databaseOwner}[{objectQualifier}kovit_ArticleInCategory]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleInCategory ]==========--
+CREATE FUNCTION {databaseOwner}[{objectQualifier}kovit_ArticleInCategory]
+( 
+	@ArticleID as int,
+	@CategoryID as int 
+)
+RETURNS bit
+
+AS
+
+	BEGIN
+	
+	DECLARE @Result bit
+	
+	SET @Result = CASE WHEN @CategoryID = 0 THEN 
+		1
+	ELSE 
+		
+		isnull((SELECT [ArticleID]      
+					  FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategoryList]
+					  WHERE [ArticleCategoryID] =@CategoryID
+						and [ArticleID]=@ArticleID),0)	 
+	END
+	RETURN @Result 
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingAdd]
+(
+	@ArticleID int,
+	@Rating int,
+	@IpAddress varchar(15),
+	@CreatedByUserID int,
+	@CreatedOnDate datetime
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+	(
+		[ArticleID],
+		[Rating],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	)
+	VALUES
+	(
+		@ArticleID,
+		isNull(@Rating,0),
+		isNull(@IpAddress,'0.0.0.0'),
+		@CreatedByUserID,
+		@CreatedOnDate
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingDelete]
+(
+	@ArticleRatingID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+	WHERE
+		[ArticleRatingID] = @ArticleRatingID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGet]
+(
+	@ArticleRatingID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleRatingID],
+		[ArticleID],
+		[Rating],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+	WHERE
+		([ArticleRatingID] = @ArticleRatingID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticleRatingID],
+		[ArticleID],
+		[Rating],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	FROM {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingGetAllByArticle] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAllByArticle]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAllByArticle]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAllByArticle]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingGetAllByArticle ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetAllByArticle]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticleRatingID],
+		[ArticleID],
+		[Rating],
+		[IpAddress],
+		[CreatedByUserID],
+		[CreatedOnDate]
+	FROM 
+		 {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+	WHERE
+	--kovit_Article
+	
+		[ArticleID] = @ArticleID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingGetTotalByArticle] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetTotalByArticle]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingGetTotalByArticle]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetTotalByArticle]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingGetTotalByArticle ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingGetTotalByArticle]
+(
+	@ArticleID int
+)
+AS
+BEGIN
+	SELECT
+		0  as ArticleRatingID,
+		@ArticleID as ArticleID,
+		isnull( {databaseOwner}{objectQualifier}kovit_ArticleRatingTotal ( @ArticleID),0) as [Rating],
+		isnull( {databaseOwner}{objectQualifier}kovit_ArticleRatingAverage ( @ArticleID),'0') as [IpAddress],
+		1 as [CreatedByUserID],
+		Getdate() as [CreatedOnDate]
+	
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleRatingUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleRatingUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleRatingUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleRatingUpdate]
+(
+	@ArticleRatingID int,
+	@ArticleID int,
+	@Rating int,
+	@IpAddress varchar(15),
+	@CreatedByUserID int = NULL,
+	@CreatedOnDate datetime = NULL
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+	SET
+-- int
+		[ArticleID] = @ArticleID,
+-- int
+		[Rating] = @Rating,
+-- varchar(15)
+		[IpAddress] = @IpAddress,
+-- int
+		[CreatedByUserID] = @CreatedByUserID,
+-- datetime
+		[CreatedOnDate] = @CreatedOnDate
+	WHERE
+		[ArticleRatingID] = @ArticleRatingID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleSearch] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleSearch]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleSearch]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleSearch]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleSearch ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleSearch]
+(	
+	 @PortalID int,
+	 @LanguageID int,
+	 @CategoryID int,
+	 @CurrentPage int 
+	,@ItemsPerPage int
+	,@SortMode int
+	,@OnlyFeatured bit
+	, @Total int OUTPUT
+)
+AS
+BEGIN 
+
+-- FIND THE MATCHING ROWS
+;WITH articles AS (
+SELECT 
+	 art.ArticleID 
+	--,art.Description as [ModelName]
+	,CASE  -- SORTING 
+		WHEN @SortMode = 0 THEN (ROW_NUMBER() OVER (ORDER BY art.[PublicationDate] DESC))
+		WHEN @SortMode = 1 THEN (ROW_NUMBER() OVER (ORDER BY art.[SortOrder] ASC,art.[PublicationDate] DESC))
+		WHEN @SortMode = 2 THEN (ROW_NUMBER() OVER (ORDER BY art.[Title] ASC))   
+		WHEN @SortMode = 3 THEN (ROW_NUMBER() OVER (ORDER BY {databaseOwner}[{objectQualifier}kovit_ArticleRatingAverage](art.ArticleID) ASC))      
+	 END  as [SortRow]  
+	FROM 
+		{databaseOwner}[{objectQualifier}kovit_Article] as art 
+	WHERE art.[PortalID]=@PortalID
+	and	art.[isHidden] = 0
+	and art.[isFeatured] = CASE WHEN @OnlyFeatured = 0 THEN art.[isFeatured] ELSE 1 end
+	and
+		art.LanguageID = CASE WHEN @LanguageID = 0 THEN art.LanguageID ELSE @LanguageID end
+	and {databaseOwner}[{objectQualifier}kovit_ArticleInCategory] (art.ArticleID,@CategoryID)=1
+
+ 
+) 	
+	SELECT
+		art.[ArticleID],		
+		[LanguageID],
+		[PortalID],
+		[PublicationDate],
+		[Title],
+		[Description],
+		[KeyWord],
+		[ArticleURL],
+		[SortOrder],
+		[isHidden],
+		[isFeatured],
+		[ArticleHTML],
+		[CreatedByUserID],
+		[CreatedOnDate],
+		[LastModifiedByUserID],
+
+		[LastModifiedOnDate] 
+		
+	FROM 
+		{databaseOwner}[{objectQualifier}kovit_Article] as art 
+		inner join articles  on
+			articles.[ArticleID]=art.[ArticleID] 
+	where  SortRow BETWEEN @ItemsPerPage * (@CurrentPage-1) +1  AND @ItemsPerPage * (@CurrentPage)  
+order by SortRow 
+ 
+SELECT 
+    @Total =  ((count(art.[ArticleID])-1)/@ItemsPerPage) +1
+	FROM 
+		{databaseOwner}[{objectQualifier}kovit_Article] as art 	
+	WHERE art.[PortalID]=@PortalID
+	and	art.[isHidden] = 0
+	and art.[isFeatured] = CASE WHEN @OnlyFeatured = 0 THEN art.[isFeatured] ELSE 1 end
+	and
+		art.LanguageID = CASE WHEN @LanguageID = 0 THEN art.LanguageID ELSE @LanguageID end
+	and {databaseOwner}[{objectQualifier}kovit_ArticleInCategory] (art.ArticleID,@CategoryID)=1
+
+ 
+ 
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingAdd] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingAdd]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingAdd]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingAdd]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingAdd]
+(
+	@TabID int,
+	@ArticleCategoryID int,
+	@ItemsPerPage int,
+	@SortMode int,
+	@previewHeight int,
+	@previewWidth int,
+	@fullHeight int,
+	@fullWidth int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	INSERT
+	INTO [kovit_ArticleTabSetting]
+	(
+		[TabID],
+		[ArticleCategoryID],
+		[ItemsPerPage],
+		[SortMode],
+		[previewHeight],
+		[previewWidth],
+		[fullHeight],
+		[fullWidth]
+	)
+	VALUES
+	(
+		@TabID,
+		@ArticleCategoryID,
+		isNull(@ItemsPerPage,10),
+		isNull(@SortMode,0),
+		isNull(@previewHeight,100),
+		isNull(@previewWidth,100),
+		isNull(@fullHeight,500),
+		isNull(@fullWidth,800)
+	)
+
+		IF @@ROWCOUNT > 0 AND @@ERROR=0
+ 		 	SELECT  SCOPE_IDENTITY();
+
+	SET @Err = @@Error
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingDelete] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingDelete]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingDelete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingDelete]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingDelete ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingDelete]
+(
+	@ArticlePortalSettingID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DELETE
+	FROM [kovit_ArticleTabSetting]
+	WHERE
+		[ArticlePortalSettingID] = @ArticlePortalSettingID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingGet] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGet]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGet]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGet]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingGet ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGet]
+(
+	@ArticlePortalSettingID int
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticlePortalSettingID],
+		[TabID],
+		[ArticleCategoryID],
+		[ItemsPerPage],
+		[SortMode],
+		[previewHeight],
+		[previewWidth],
+		[fullHeight],
+		[fullWidth]
+	FROM [kovit_ArticleTabSetting]
+	WHERE
+		([ArticlePortalSettingID] = @ArticlePortalSettingID)
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingGetAll] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAll]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAll]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAll]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingGetAll ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAll] 
+AS
+BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @Err int
+
+	SELECT
+		[ArticlePortalSettingID],
+		[TabID],
+		[ArticleCategoryID],
+		[ItemsPerPage],
+		[SortMode],
+		[previewHeight],
+		[previewWidth],
+		[fullHeight],
+		[fullWidth]
+	FROM [kovit_ArticleTabSetting]
+	
+	
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingGetAllByArticleCategory] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByArticleCategory]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByArticleCategory]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByArticleCategory]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingGetAllByArticleCategory ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByArticleCategory]
+(
+	@ArticleCategoryID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticlePortalSettingID],
+		[TabID],
+		[ArticleCategoryID],
+		[ItemsPerPage],
+		[SortMode],
+		[previewHeight],
+		[previewWidth],
+		[fullHeight],
+		[fullWidth]
+	FROM 
+		[kovit_ArticleTabSetting]
+	WHERE
+	--kovit_ArticleCategory
+	
+		[ArticleCategoryID] = @ArticleCategoryID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingGetAllByTabs] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByTabs]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByTabs]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByTabs]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingGetAllByTabs ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingGetAllByTabs]
+(
+	@TabID int
+)
+AS
+BEGIN
+	SELECT
+		[ArticlePortalSettingID],
+		[TabID],
+		[ArticleCategoryID],
+		[ItemsPerPage],
+		[SortMode],
+		[previewHeight],
+		[previewWidth],
+		[fullHeight],
+		[fullWidth]
+	FROM 
+		[kovit_ArticleTabSetting]
+	WHERE
+	--Tabs
+	
+		[TabID] = @TabID
+
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleTabSettingUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleTabSettingUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleTabSettingUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleTabSettingUpdate]
+(
+	@ArticlePortalSettingID int,
+	@TabID int,
+	@ArticleCategoryID int,
+	@ItemsPerPage int,
+	@SortMode int,
+	@previewHeight int,
+	@previewWidth int,
+	@fullHeight int,
+	@fullWidth int
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE [kovit_ArticleTabSetting]
+	SET
+-- int
+		[TabID] = @TabID,
+-- int
+		[ArticleCategoryID] = @ArticleCategoryID,
+-- int
+		[ItemsPerPage] = @ItemsPerPage,
+-- int
+		[SortMode] = @SortMode,
+-- int
+		[previewHeight] = @previewHeight,
+-- int
+		[previewWidth] = @previewWidth,
+-- int
+		[fullHeight] = @fullHeight,
+-- int
+		[fullWidth] = @fullWidth
+	WHERE
+		[ArticlePortalSettingID] = @ArticlePortalSettingID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+
+ 
+--==[Drop Stored Procedure [kovit_ArticleUpdate] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleUpdate]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleUpdate]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleUpdate]
+GO
+
+--==========[Create Stored Procedure [kovit_ArticleUpdate ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleUpdate]
+(
+	@ArticleID int,
+	@LanguageID int,
+	@PortalID int,
+	@PublicationDate datetime,
+	@Title nvarchar(128),
+	@Description nvarchar(160),
+	@KeyWord nvarchar(200),
+	@ArticleURL varchar(128),
+	@SortOrder int,
+	@isHidden bit,
+	@isFeatured bit,
+	@ArticleHTML nvarchar(MAX),
+	@CreatedByUserID int = NULL,
+	@CreatedOnDate datetime = NULL,
+	@LastModifiedByUserID int = NULL,
+	@LastModifiedOnDate datetime = NULL
+)
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	UPDATE {databaseOwner}[{objectQualifier}kovit_Article]
+	SET
+-- int
+		[LanguageID] = @LanguageID,
+-- int
+		[PortalID] = @PortalID,
+-- datetime
+		[PublicationDate] = @PublicationDate,
+-- nvarchar(128)
+		[Title] = @Title,
+-- nvarchar(160)
+		[Description] = @Description,
+-- nvarchar(200)
+		[KeyWord] = @KeyWord,
+-- varchar(128)
+		[ArticleURL] = @ArticleURL,
+-- int
+		[SortOrder] = @SortOrder,
+-- bit
+		[isHidden] = @isHidden,
+-- bit
+		[isFeatured] = @isFeatured,
+-- nvarchar(MAX)
+		[ArticleHTML] = @ArticleHTML,
+-- int
+		[CreatedByUserID] = @CreatedByUserID,
+-- datetime
+		[CreatedOnDate] = @CreatedOnDate,
+-- int
+		[LastModifiedByUserID] = @LastModifiedByUserID,
+-- datetime
+		[LastModifiedOnDate] = @LastModifiedOnDate
+	WHERE
+		[ArticleID] = @ArticleID
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+
+GO
+--==[Drop Stored Procedure [kovit_ArticleCategoryCreateROOT] if already exists in database ]==--
+
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}kovit_ArticleCategoryCreateROOT]  ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleCategoryCreateROOT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryCreateROOT]
+GO
+
+
+--==========[Create Stored Procedure [kovit_ArticleCategoryAdd ]==========--
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}kovit_ArticleCategoryCreateROOT]
+ 
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	IF not exists (SELECT [ArticleCategoryID] FROM {databaseOwner}[{objectQualifier}kovit_ArticleCategory] where [ArticleCategoryID]=0)
+		BEGIN
+
+			SET IDENTITY_INSERT {databaseOwner}[{objectQualifier}kovit_ArticleCategory]  ON
+ 
+			INSERT INTO {databaseOwner}[{objectQualifier}kovit_ArticleCategory](
+				[ArticleCategoryID],[ParentCategoryID],	[Title],[LanguageID],[PortalID],[ArticleCategoryURL]) VALUES
+				(0,0,'root',1,0,'root')
+ 
+			
+			SET IDENTITY_INSERT {databaseOwner}[{objectQualifier}kovit_ArticleCategory] OFF
+ 
+
+			ALTER TABLE {databaseOwner}[{objectQualifier}kovit_ArticleCategory]  WITH NOCHECK ADD  CONSTRAINT [FK_kovit_ArticleCategory_kovit_ArticleCategory] FOREIGN KEY([ParentCategoryID])
+			references {databaseOwner}[{objectQualifier}kovit_ArticleCategory] ([ArticleCategoryID]) 
+			NOT FOR REPLICATION   
+ 
+		END
+	SET @Err = @@Error
+	RETURN @Err
+END
+GO
+
+
+/****** Object:  UserDefinedFunction {databaseOwner}[{objectQualifier}kovit_ArticleRatingAverage]    Script Date: 04/06/2010 12:50:37 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingAverage]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION {databaseOwner}[{objectQualifier}kovit_ArticleRatingAverage]
+GO
+
+CREATE FUNCTION {databaseOwner}[{objectQualifier}kovit_ArticleRatingAverage]
+(
+	@ArticleID int
+
+)
+RETURNS varchar(2048)
+AS
+BEGIN
+    
+DECLARE @result varchar(2048)
+SELECT @result =  convert(decimal(10,1),isnull(avg(cast([Rating] as float)),0))
+  FROM  {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+WHERE  ArticleID=@ArticleID
+and Rating<>0
+RETURN @result
+END
+GO
+
+/****** Object:  UserDefinedFunction {databaseOwner}[{objectQualifier}kovit_ArticleRatingTotal]    Script Date: 04/06/2010 12:50:24 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}kovit_ArticleRatingTotal]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION {databaseOwner}[{objectQualifier}kovit_ArticleRatingTotal]
+GO
+
+CREATE FUNCTION {databaseOwner}[{objectQualifier}kovit_ArticleRatingTotal]
+(
+	@ArticleID int
+
+)
+RETURNS varchar(2048)
+AS
+BEGIN
+    
+DECLARE @result varchar(2048)
+SELECT @result =  count([Rating]) 
+  FROM  {databaseOwner}[{objectQualifier}kovit_ArticleRating]
+WHERE  ArticleID=@ArticleID
+and Rating<>0
+RETURN @result
+END
+GO
+
+

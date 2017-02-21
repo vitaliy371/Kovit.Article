@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Kovit.Article">
+</Property><Property Name="Solution File" Value="C:\Work\kovit.co.ua\Kovit.Article\Kovit.Article.sln">
+</Property><Property Name="User Options File" Value="C:\Work\kovit.co.ua\Kovit.Article\Kovit.Article.suo">
+</Property><Property Name="Date" Value="25 марта 2014 г.">
+</Property><Property Name="Time" Value="22:02">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Kovit.Article.sln" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Kovit.Article.sln">
+</Event><Event ErrorLevel="0" Project="" Source="Kovit.Article.suo" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Kovit.Article.suo">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Kovit.Article.vbproj" Description="Project file successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Kovit.Article.vbproj">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Kovit.Article.vbproj.user" Description="Project user file successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Kovit.Article.vbproj.user">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Email\CategorySubscriptionScheduler.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Email\CategorySubscriptionScheduler.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Core.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Core.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Data\AbstractController.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Data\AbstractController.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Data\DataProvider.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Data\DataProvider.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Data\SqlDataProvider.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Data\SqlDataProvider.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Email\EmailProvider.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Email\EmailProvider.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Email\EmailProviderScheduler.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Email\EmailProviderScheduler.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleAtributeInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleAtributeInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleAtributeListInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleAtributeListInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleAttachmentInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleAttachmentInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleAttachmentTypeInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleAttachmentTypeInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleCategoryInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleCategoryInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleCategoryListInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleCategoryListInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleCategorySubscriptionInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleCategorySubscriptionInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleCommentInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleCommentInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleEventInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleEventInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleRatingInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleRatingInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleYouTubeInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleYouTubeInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\ArticleLocationInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\ArticleLocationInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\EmaillStateInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\EmaillStateInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\EmailMessageInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\EmailMessageInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\EmailMessageStateInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\EmailMessageStateInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\EmailPortalInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\EmailPortalInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\EmailQueryInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\EmailQueryInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Entity\EmailRecipientInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\Entity\EmailRecipientInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\AssemblyInfo.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\AssemblyInfo.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\Application.Designer.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\Application.Designer.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\Resources.Designer.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\Resources.Designer.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\Settings.Designer.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\Settings.Designer.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="RSS.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\RSS.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="SitemapProvider.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\SitemapProvider.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="URLManager.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\URLManager.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="WebService.vb" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\WebService.vb">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\Application.myapp" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\Application.myapp">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\Settings.settings" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\Settings.settings">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="My Project\Resources.resx" Description="File successfully backed up as C:\Work\kovit.co.ua\Kovit.Article\Backup\My Project\Resources.resx">
+</Event><Event ErrorLevel="0" Project="Kovit.Article" Source="Kovit.Article.vbproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="Kovit.Article" Source="Kovit.Article.vbproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="0" Project="" Source="Kovit.Article.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Kovit.Article.sln" Description="Converted">
+</Event></UpgradeLog>

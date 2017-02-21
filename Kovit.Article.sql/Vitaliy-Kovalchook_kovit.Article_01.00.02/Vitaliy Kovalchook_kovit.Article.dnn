@@ -1,0 +1,361 @@
+﻿<dotnetnuke type="Package" version="5.0">
+  <packages><package name="kovit.Article" type="Module" version="1.0.2">
+  <friendlyName>kovit.Article</friendlyName>
+  <description>Articles Module with category, comments, gallery, rating, files, events features.</description>
+  <owner>
+    <name>Vitaliy Kovalchook</name>
+    <organization>KoVit Web Development</organization>
+    <url>http://kovit.co.ua</url>
+    <email>Vitaliy.Kovalchook@gmail.com</email>
+  </owner>
+  <license>http://kovit.co.ua
+Copyright (c) 2009
+by KoVit Web Development
+
+Вы можете делать с этим программным обеспечением что вам угодно. Автор не несет никакой ответсвености за действия произведенные вами с этим программным обеспечением.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+DEALINGS IN THE SOFTWARE.</license>
+  <releaseNotes>01.00.01 
+Первый публичный релиз
+First Public Beta</releaseNotes>
+  <components>
+    <component type="Script">
+      <scripts>
+        <basePath>DesktopModules\kovit.Article</basePath>
+        <script type="Install">
+          <path>Providers\DataProviders\SqlDataProvider</path>
+          <name>01.00.00.SqlDataProvider</name>
+          <version>01.00.00</version>
+        </script>
+        <script type="Install">
+          <path>Providers\DataProviders\SqlDataProvider</path>
+          <name>01.00.01.SqlDataProvider</name>
+          <version>01.00.01</version>
+        </script>
+        <script type="UnInstall">
+          <path>Providers\DataProviders\SqlDataProvider</path>
+          <name>Uninstall.SqlDataProvider</name>
+          <version>1.0.2</version>
+        </script>
+      </scripts>
+    </component>
+    <component type="Module">
+      <desktopModule>
+        <moduleName>kovit.Article</moduleName>
+        <foldername>kovit.Article</foldername>
+        <businessControllerClass />
+        <codeSubDirectory>kovit.Article</codeSubDirectory>
+        <supportedFeatures />
+        <moduleDefinitions>
+          <moduleDefinition>
+            <friendlyName>kovit.Article</friendlyName>
+            <defaultCacheTime>0</defaultCacheTime>
+            <moduleControls>
+              <moduleControl>
+                <controlKey />
+                <controlSrc>DesktopModules/kovit.Article/kovitArticle.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article List</controlTitle>
+                <controlType>View</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+              <moduleControl>
+                <controlKey>edit</controlKey>
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleEdit.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Edit</controlTitle>
+                <controlType>Edit</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+              <moduleControl>
+                <controlKey>editcategory</controlKey>
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleCategoryListEdit.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Categories Edit</controlTitle>
+                <controlType>Edit</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+              <moduleControl>
+                <controlKey>editevents</controlKey>
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleEventEdit.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Event Edit</controlTitle>
+                <controlType>Edit</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+              <moduleControl>
+                <controlKey>editfiles</controlKey>
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleFileEdit.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Files Edit</controlTitle>
+                <controlType>Edit</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+            </moduleControls>
+          </moduleDefinition>
+          <moduleDefinition>
+            <friendlyName>kovit.ArticleCategory</friendlyName>
+            <defaultCacheTime>0</defaultCacheTime>
+            <moduleControls>
+              <moduleControl>
+                <controlKey />
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleCategory.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Category</controlTitle>
+                <controlType>View</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+              <moduleControl>
+                <controlKey>edit</controlKey>
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleCategoryEdit.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Category Edit</controlTitle>
+                <controlType>Edit</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+            </moduleControls>
+          </moduleDefinition>
+          <moduleDefinition>
+            <friendlyName>kovit.Article Event</friendlyName>
+            <defaultCacheTime>0</defaultCacheTime>
+            <moduleControls>
+              <moduleControl>
+                <controlKey />
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleEvent.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Event</controlTitle>
+                <controlType>View</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+              <moduleControl>
+                <controlKey>Settings</controlKey>
+                <controlSrc>DesktopModules/kovit.Article/kovitArticleEventSettings.ascx</controlSrc>
+                <supportsPartialRendering>False</supportsPartialRendering>
+                <controlTitle>Article Event Settings</controlTitle>
+                <controlType>Edit</controlType>
+                <iconFile />
+                <helpUrl />
+                <viewOrder>0</viewOrder>
+              </moduleControl>
+            </moduleControls>
+          </moduleDefinition>
+        </moduleDefinitions>
+      </desktopModule>
+    </component>
+    <component type="File">
+      <files>
+        <basePath>App_Code\kovit.Article</basePath>
+        <file>
+          <path>Info</path>
+          <name>ArticleAttachmentInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleAttachmentTypeInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleCategoryInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleCategoryListInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleCommentInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleEventInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleInfo.vb</name>
+        </file>
+        <file>
+          <path>Info</path>
+          <name>ArticleRatingInfo.vb</name>
+        </file>
+        <file>
+          <name>AbstractController.vb</name>
+        </file>
+		<file>
+          <name>Core.vb</name>
+        </file>
+        <file>
+          <name>DataProvider.vb</name>
+        </file>
+        <file>
+          <name>kovitArticle.vb</name>
+        </file>
+        <file>
+          <name>SqlDataProvider.vb</name>
+        </file>
+        <file>
+          <name>URLManager.vb</name>
+        </file>
+      </files>
+    </component>
+    <component type="File">
+      <files>
+        <basePath>DesktopModules\kovit.Article</basePath>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticle.ascx.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticle.ascx.ru-RU.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleCategory.ascx.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleCategoryEdit.ascx.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleCategoryListEdit.ascx.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleCategoryListEdit.ascx.ru-RU.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleEdit.ascx.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleEventEdit.ascx.resx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>kovitArticleFileEdit.ascx.resx</name>
+        </file>
+        <file>
+          <name>bkg-nav.gif</name>
+        </file>
+        <file>
+          <name>CategoryMenu.js</name>
+        </file>
+        <file>
+          <name>comment-bg.gif</name>
+        </file>
+        <file>
+          <name>crystal-stars.gif</name>
+        </file>
+        <file>
+          <name>form_buttons.gif</name>
+        </file>
+        <file>
+          <name>jquery.cookie.js</name>
+        </file>
+        <file>
+          <name>jquery.lightbox-0.5.css</name>
+        </file>
+        <file>
+          <name>jquery.lightbox-0.5.js</name>
+        </file>
+        <file>
+          <name>kovitArticle.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticle.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticle.asmx</name>
+        </file>
+        <file>
+          <name>kovitArticleCategory.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleCategory.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleCategoryEdit.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleCategoryEdit.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleCategoryListEdit.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleCategoryListEdit.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleEdit.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleEdit.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleEvent.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleEvent.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleEventEdit.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleEventEdit.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleEventSettings.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleEventSettings.ascx.vb</name>
+        </file>
+        <file>
+          <name>kovitArticleFileEdit.ascx</name>
+        </file>
+        <file>
+          <name>kovitArticleFileEdit.ascx.vb</name>
+        </file>
+        <file>
+          <name>main-bg.gif</name>
+        </file>
+        <file>
+          <name>module.css</name>
+        </file>
+        <file>
+          <name>navy-blue.gif</name>
+        </file>
+      </files>
+    </component>
+  </components>
+</package></packages>
+</dotnetnuke>

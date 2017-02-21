@@ -1,0 +1,317 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Kovit.Article
+</name>
+</assembly>
+<members>
+<member name="T:Kovit.Article.Data.SqlDataProvider">
+ -----------------------------------------------------------------------------
+ <summary>
+ SQL Server implementation of the abstract DataProvider class
+ </summary>
+	<remarks>
+	</remarks>
+	<history>
+	</history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:Kovit.Article.Data.AbstractController.GetObject(System.Type@,System.String@,System.String@,System.Object[])">
+	<summary>
+ Retrieves the details of a specified Object
+ </summary>
+	<returns>DataInfo object</returns>
+</member><member name="M:Kovit.Article.Data.AbstractController.ExecuteScalar(System.String,System.String@,System.String[])">
+	<summary>
+ Retrieves the details of a specified Object
+ </summary>
+	<returns>DataInfo object</returns>
+</member><member name="M:Kovit.Article.Data.AbstractController.GetObjectList(System.Type,System.String,System.String@,System.Object[])">
+	<summary>
+ Retrieves a list of ObjectType By ParamArray
+ </summary>
+	<returns>ArrayList of ObjectType objects</returns>
+</member><member name="M:Kovit.Article.Data.AbstractController.GetXML(System.String,System.String@,System.String[])">
+	<summary>
+ Retrieves a list of ObjectType By ParamArray
+ </summary>
+	<returns>ArrayList of ObjectType objects</returns>
+</member><member name="T:Kovit.Article.Data.AbstractController">
+ -----------------------------------------------------------------------------
+ <summary>
+		The DataController class provides business layer methods
+		for Data objects used by the dnnData module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		 1.07.2010 updated by KoVit
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.EmailQueryInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The EmailQueryInfo Class the business object representing a single
+		EmailMessageState object, as used by the eMail module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	23.03.2010 11:40:44	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleCategoryListInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleCategoryListInfo Class the business object representing a single
+		ArticleCategoryList object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	11.11.2009 22:12:56	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.EmailRecipientInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The EmailRecipientInfo Class the business object representing a single
+		EmailRecipient object, as used by the eMail module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	06.04.2010 17:52:35	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleAtributeInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleAtributeInfo Class the business object representing a single
+		ArticleAtribute object, as used by the Entity module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	16.07.2012 6:05:38	Code file automatically generated from 1gb_kovit_dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleCategorySubscriptionInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleCategorySubscriptionInfo Class the business object representing a single
+		ArticleCategorySubscription object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	25.03.2010 14:14:54	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleCommentInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleCommentInfo Class the business object representing a single
+		ArticleComment object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	11.11.2009 22:12:56	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleAtributeListInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleAtributeListInfo Class the business object representing a single
+		ArticleAtributeList object, as used by the Entity module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	16.07.2012 6:05:38	Code file automatically generated from 1gb_kovit_dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.EmaillStateInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The EmaillStateInfo Class the business object representing a single
+		EmaillState object, as used by the eMail module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	23.03.2010 11:40:44	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:Kovit.Article.SitemapProvider.GetUrls(System.Int32,DotNetNuke.Entities.Portals.PortalSettings,System.String)">
+	<summary>
+ Includes page urls on the sitemap
+ </summary>
+	<remarks>
+ Pages that are included:
+ - are not deleted
+ - are not disabled
+ - are normal pages (not links,...)
+ - are visible (based on date and permissions)
+ </remarks>
+</member><member name="T:Kovit.Article.Entity.ArticleAttachmentTypeInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleAttachmentTypeInfo Class the business object representing a single
+		ArticleAttachmentType object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	11.11.2009 22:12:56	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleCategoryInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleCategoryInfo Class the business object representing a single
+		ArticleCategory object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	13.11.2009 4:44:53	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleLocationInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleAtributeInfo Class the business object representing a single
+		ArticleAtribute object, as used by the Entity module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	16.07.2012 6:05:38	Code file automatically generated from 1gb_kovit_dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Data.DataProvider">
+ -----------------------------------------------------------------------------
+ <summary>
+ An abstract class for the data access layer
+ </summary>
+	<remarks>
+	</remarks>
+	<history>
+	</history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleYouTubeInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleAtributeInfo Class the business object representing a single
+		ArticleAtribute object, as used by the Entity module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	16.07.2012 6:05:38	Code file automatically generated from 1gb_kovit_dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.EmailMessageInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The EmailMessageInfo Class the business object representing a single
+		EmailMessage object, as used by the eMail module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	23.03.2010 11:40:44	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="P:Kovit.Article.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Kovit.Article.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Kovit.Article.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="T:Kovit.Article.Entity.ArticleInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleInfo Class the business object representing a single
+		Article object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	25.03.2010 13:00:29	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.EmailPortalInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The EmailPortalInfo Class the business object representing a single
+		EmailPortal object, as used by the eMail module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	23.03.2010 11:40:44	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.EmailMessageStateInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The EmailMessageStateInfo Class the business object representing a single
+		EmailMessageState object, as used by the eMail module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	23.03.2010 11:40:44	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleAttachmentInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleAttachmentInfo Class the business object representing a single
+		ArticleAttachment object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	11.11.2009 22:12:56	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleRatingInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleRatingInfo Class the business object representing a single
+		ArticleRating object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	11.11.2009 22:12:56	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="T:Kovit.Article.Entity.ArticleEventInfo">
+ -----------------------------------------------------------------------------
+ <summary>
+		The ArticleEventInfo Class the business object representing a single
+		ArticleEvent object, as used by the Data module.
+ </summary>
+	<remarks></remarks>
+	<history>
+		[MyGeneration]	11.11.2009 22:12:56	Code file automatically generated from dnn by MyGeneration v1.3.0.3
+ </history>
+ -----------------------------------------------------------------------------
+
+</member>
+</members>
+</doc>

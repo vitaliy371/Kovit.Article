@@ -1,0 +1,348 @@
+
+.kovitArticleCategory
+{
+	width: 240px;
+}
+.kovitArticleCategory a span
+{
+	font-size: 12px;
+	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+	display: block;
+	height: 16px;
+	padding: 10px;
+	background-image: url('bkg-nav.gif' );
+	background-position: 0px 0px;
+	background-repeat: repeat-x;
+	border: solid 1px #DFF0FB;
+}
+.kovitArticleCategory a:hover span
+{
+	background-position: 0px -38px;
+	border: solid 1px #dcdcdc;
+}
+
+
+.kovitArticleList
+{
+	width: 700px;
+}
+
+.kovitArticleList td
+{
+	border: solid 1px #cdcdcd;
+	padding: 6px;
+}
+.kovitArticleItem
+{
+	width: 670px;
+	border: solid 1px #cdcdcd;
+	padding: 8px;
+}
+
+.kovitArticleList h2, .kovitArticleItem h2
+{
+	border-bottom: 1px solid #cdcdcd;
+	color: #333333;
+	font-size: 150%;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 100%;
+	margin: 0;
+	background-image: url('main-bg.gif' );
+	background-repeat: repeat;
+	padding: 5px;
+}
+.kovitArticleList small, .kovitArticleItem small
+{
+	float: right;
+	margin: 5px;
+	color: #365391;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px;
+	background: #DFF0FB;
+	border: solid 1px #cdcdcd;
+}
+.kovitArticleList p
+{
+	padding: 5px;
+}
+
+.kovitAticleComment
+{
+	background-image: url('comment-bg.gif' );
+	background-repeat: repeat-x;
+	padding: 10px 5px;
+}
+
+.lblValName, .lblValEmail
+{
+	color: Red;
+	display: none;
+	font-weight: bold;
+}
+.kovitEventList
+{
+	border: 1px solid #cdcdcd;
+}
+.kovitEventList h2
+{
+	color: #000;
+	margin: 5px;
+	text-align: center;
+}
+
+.kovitEventList h3
+{
+	margin-top: 0px;
+	background-image: url('navy-blue.gif' );
+	background-repeat: repeat-x;
+	color: #fff;
+	text-align: center;
+	font-size: 11px;
+	padding: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.kovitEventList div
+{
+	font-weight: bold;
+	color: #000;
+	font-size: 15px;
+	text-align: center;
+}
+.kovitEventList p
+{
+	text-align: center;
+	color: #666666;
+	font-size: 12px;
+}
+
+
+.Pages
+{
+	padding: 0px 5px;
+	height: 25px;
+}
+.Pages a span
+{
+	background: #EDF4FB;
+	float: left;
+	height: 15px;
+	padding: 5px;
+	margin-right: 2px;
+}
+
+.clear
+{
+	/* generic container (i.e. div) for floating buttons */
+	overflow: hidden;
+	width: 100%;
+}
+.button, .button span
+{
+	background-image: url('form_buttons.gif' );
+	text-decoration: none;
+	color: #2e523b;
+	font-style: normal;
+	vertical-align: middle;
+}
+.button
+{
+	margin: 0px;
+	padding: 0px;
+	background-position: top left;
+}
+.button span
+{
+	margin: 0px 0px 0 10px;
+	padding: 0px 10px 0 0px;
+	background-position: right 0px;
+}
+.button:hover
+{
+	background-position: 0px -60px;
+	color: #000;
+	outline: none; /* hide dotted outline in Firefox */
+}
+.button:hover span
+{
+	background-position: right -60px;
+}
+
+
+
+
+.RatingButton
+{
+	background-image: url(buttons.gif);
+	padding-top: 5px;
+	padding-left: 30px;
+	padding-right: 5px;
+	font-size: 12px;
+	font-weight: bold;
+	display: block;
+	width: 145px;
+	height: 21px;
+	background-position: 0px -114px;
+	background-repeat: repeat;
+}
+.StarRating
+{
+	background-image: url(crystal-stars.gif);
+	width: 140px;
+	height: 28px;
+	background-position: 0px -56px;
+	background-repeat: repeat-x;
+	cursor: pointer;
+}
+
+.HoverRating
+{
+	background-image: url(crystal-stars.gif);
+	width: 0px; /*84px;*/
+	height: 28px;
+	display: block;
+	background-position: 0px -112px;
+	background-repeat: repeat-x;
+}
+
+.CurrentRating
+{
+	background-image: url(crystal-stars.gif);
+	height: 28px;
+	display: block;
+	background-position: 0px -84px;
+	background-repeat: repeat-x;
+}
+
+.RatingText
+{
+	font-weight: bold;
+	font-size: 12px;
+	padding: 10px 0px !important;
+}
+
+kovitEditContainer
+{
+	width: 770px;
+}
+.txtEditorCell
+{
+	width: 600px;
+	height: 300px;
+}
+#txtReview
+{
+	width: 100%;
+}
+
+.reviewInput
+{
+	width: 190px;
+}
+
+/* jQuery lightBox plugin - Gallery style */
+#gallery
+{
+	background-image: url('comment-bg.gif' );
+	background-repeat: repeat-x;
+	padding: 5px;
+	width: 98%;
+}
+#gallery ul
+{
+	list-style: none;
+}
+#gallery ul li
+{
+	display: inline;
+}
+#gallery ul img
+{
+	border: 5px solid #EDF4FB;
+	border-width: 5px 5px 5px;
+}
+#gallery ul a:hover img
+{
+	border: 5px solid #fff;
+	border-width: 5px 5px 5px;
+	color: #fff;
+}
+#gallery ul a:hover
+{
+	color: #495180;
+	font-weight: bold;
+}
+
+
+ul.ArticleCategoryMenu, ul.ArticleCategoryMenu ul
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+
+ul.ArticleCategoryMenu
+{
+	width: 230px;
+}
+
+
+ul.ArticleCategoryMenu a span
+{
+	text-decoration: none;
+	display: block;
+}
+
+ul.ArticleCategoryMenu li
+{
+	margin-top: 1px;
+	list-style-type: none;
+}
+
+ul.ArticleCategoryMenu li a small
+{
+	float: right;
+	color: #5666FF;
+	padding: 0.5em;
+}
+
+
+
+ul.ArticleCategoryMenu li a span
+{
+	background-image: url('bkg-nav.gif' );
+	background-position: 0px 0px;
+	background-repeat: repeat-x;
+	border: solid 1px #DFF0FB;
+	color: #000;
+	padding: 0.5em;
+}
+
+ul.ArticleCategoryMenu li a:hover span
+{
+	background-image: url('bkg-nav.gif' );
+	background-position: 0px -38px;
+	background-repeat: repeat-x;
+	border: solid 1px #DFF0FB;
+}
+
+ul.ArticleCategoryMenu li ul li a span
+{
+	background: #EDF4FB;
+	color: #000;
+	padding-left: 20px;
+}
+
+ul.ArticleCategoryMenu li ul li a:hover span
+{
+	background: #EDF4FB;
+	border-left: 5px #365391 solid;
+	padding-left: 15px;
+}
+
